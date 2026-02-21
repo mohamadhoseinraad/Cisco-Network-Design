@@ -7,7 +7,6 @@
 ## 📋 Project Overview
 This repository contains my implementation of a university network project for **Computer Networks 2** course under Dr. Fatemeh Rezaei. The project simulates a real-world enterprise network with headquarters and branch office connected securely over the internet.
 
-**Student ID:** 40119783
 
 ## 🏗 Network Architecture
 ![IMG](./Diagrams/Architecture.png)
@@ -228,13 +227,6 @@ Through this project, I gained hands-on experience with:
 - **Security** - ACL implementation for traffic filtering
 - **Troubleshooting** - Systematic network problem-solving
 
-## 🛠 Tools & Technologies
-
-- **Cisco Packet Tracer** - Network simulation
-- **Cisco IOS** - Router and switch configuration
-- **Protocols:** OSPF, GRE, DHCP, NAT/PAT, 802.1Q
-- **Git** - Version control
-- **Markdown** - Documentation
 
 ## 📚 Additional Resources
 
@@ -242,32 +234,16 @@ Through this project, I gained hands-on experience with:
 - [Cisco IOS Command Reference](https://www.cisco.com/c/en/us/support/)
 - [CCNA Study Guide](https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html)
 
-## 🤝 Contributions
-
-This is a university project, but feel free to:
-- ⭐ Star this repository if you find it helpful
-- 🐛 Report issues or suggest improvements
-- 📖 Use as learning reference (with attribution)
 
 ## 📄 License & Attribution
 
 **Academic Project** - For educational purposes  
-**Student:** Mohammad (ID: 40119783)  
 **Course:** Computer Networks 2  
 **Instructor:** Dr. Fatemeh Rezaei  
-**Institution:** [Your University Name]
+**Institution:** K. N. Toosi University of Technologey
 
-If you use this project as reference, please provide attribution.
-
-## 📧 Contact
-
-For questions or discussions about this project:
-- Open an issue on GitHub
-- Check the documentation files
-- Review troubleshooting guides
 
 ---
 
-**⭐ If this project helped you learn networking concepts, please star the repository!**
 
 *Last Updated: February 2026*
