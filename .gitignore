@@ -1,0 +1,31 @@
+# Packet Tracer temporary files
+*.bak
+*~
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+temp/
+
+# Keep the main .pkt file but ignore backups
+*-backup.pkt

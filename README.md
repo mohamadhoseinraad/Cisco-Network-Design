@@ -10,7 +10,7 @@ This repository contains my implementation of a university network project for *
 **Student ID:** 40119783
 
 ## 🏗 Network Architecture
-
+![IMG](./Diagrams/Architecture.png)
 ### Network Components
 | Device | Role | Location |
 |--------|------|----------|
@@ -85,3 +85,189 @@ interface f0/2
 interface g0/1
  switchport mode trunk
  switchport trunk allowed vlan 10,20,30
+```
+
+### 2. Router-on-a-Stick on R1-HQ
+```cisco
+interface GigabitEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 172.16.10.1 255.255.255.0
+ ip helper-address 172.16.30.10
+!
+interface GigabitEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 172.16.20.1 255.255.255.0
+ ip helper-address 172.16.30.10
+```
+
+### 3. NAT Configuration on R1-HQ
+```cisco
+interface GigabitEthernet0/0
+ ip nat outside
+!
+interface GigabitEthernet0/1.10
+ ip nat inside
+!
+access-list 1 permit 172.16.0.0 0.0.255.255
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+```
+
+### 4. GRE Tunnel Configuration
+```cisco
+! On R1-HQ
+interface Tunnel0
+ ip address 10.10.10.1 255.255.255.252
+ tunnel source GigabitEthernet0/0
+ tunnel destination 200.200.200.2
+
+! On R3-Branch
+interface Tunnel0
+ ip address 10.10.10.2 255.255.255.252
+ tunnel source GigabitEthernet0/0
+ tunnel destination 100.100.100.2
+```
+
+### 5. OSPF Configuration on R1-HQ
+```cisco
+router ospf 1
+ router-id 1.1.1.1
+ network 172.16.10.0 0.0.0.255 area 0
+ network 172.16.20.0 0.0.0.255 area 0
+ network 172.16.30.0 0.0.0.255 area 0
+ network 10.10.10.0 0.0.0.3 area 0
+ passive-interface GigabitEthernet0/1.10
+ passive-interface GigabitEthernet0/1.20
+ passive-interface GigabitEthernet0/1.30
+```
+
+### 6. ACL for Web Server Security on R3-Branch
+```cisco
+ip access-list extended WEB-SERVER-ACL
+ deny icmp any host 172.17.17.100 echo
+ permit tcp any host 172.17.17.100 eq 443
+ permit ip any any
+!
+interface GigabitEthernet0/1
+ ip access-group WEB-SERVER-ACL in
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Cisco Packet Tracer 7.3 or higher
+- Basic understanding of networking concepts
+
+### Getting Started
+1. **Clone or download** this repository
+2. **Open** `40119783-NetProject.pkt` in Packet Tracer
+3. **Explore** the topology and test connectivity
+4. **Review** configuration files in `Configs/` folder
+5. **Read** step-by-step documentation in `Documentation/` folder
+
+### Quick Tests
+```bash
+# From any PC (after DHCP):
+ping 8.8.8.8              # Test internet access via NAT
+ping 172.17.17.10         # Test HQ-to-Branch connectivity
+
+# From HQ PC to web server:
+ping 172.17.17.100        # Should FAIL (blocked by ACL)
+https://172.17.17.100     # Should WORK (HTTPS allowed)
+```
+
+## 📖 Documentation
+
+This project includes comprehensive documentation:
+
+- **[USAGE.md](USAGE.md)** - How to use this repository
+- **[GIT_GUIDE.md](GIT_GUIDE.md)** - Version control best practices
+- **[Documentation/](Documentation/)** - Complete step-by-step guides
+
+### Learning Path
+1. [VLAN Design](Documentation/01-VLAN_Design.md) - Network segmentation
+2. [Router-on-a-Stick](Documentation/02-Router_on_Stick.md) - Inter-VLAN routing
+3. [NAT/PAT](Documentation/03-NAT_PAT_Configuration.md) - Internet access
+4. [DHCP](Documentation/04-DHCP_Configuration.md) - Automatic IP assignment
+5. [GRE Tunnel](Documentation/05-GRE_Tunnel_Setup.md) - Site-to-site connectivity
+6. [OSPF](Documentation/06-OSPF_Routing.md) - Dynamic routing
+7. [ACL Security](Documentation/07-ACL_Security.md) - Access control
+8. [Testing](Documentation/08-Verification_Tests.md) - Comprehensive validation
+
+## 🧪 Testing & Validation
+
+All features have been tested and verified. See [Documentation/08-Verification_Tests.md](Documentation/08-Verification_Tests.md) for:
+- ✅ Physical layer connectivity
+- ✅ VLAN and trunk operation
+- ✅ Inter-VLAN routing
+- ✅ DHCP IP assignment
+- ✅ NAT/PAT to internet  
+- ✅ GRE tunnel connectivity
+- ✅ OSPF neighbor adjacency
+- ✅ ACL security rules
+- ✅ End-to-end HQ-Branch communication
+
+## 🎯 Project Requirements Met
+
+| Requirement | Status | Description |
+|-------------|--------|-------------|
+| VLANs | ✅ | Three VLANs at HQ (10, 20, 30) |
+| Router-on-Stick | ✅ | Subinterfaces for inter-VLAN routing |
+| DHCP | ✅ | Central server with IP relay configured |
+| NAT/PAT | ✅ | All networks can reach Internet (8.8.8.8) |
+| GRE Tunnel | ✅ | Secure site-to-site connection |
+| OSPF | ✅ | Dynamic routing over tunnel |
+| **Bonus: ACL** | ⭐ | Web server security implemented |
+
+## 💡 Key Learning Outcomes
+
+Through this project, I gained hands-on experience with:
+- **VLAN Design** - Network segmentation for security and performance
+- **Routing Protocols** - OSPF dynamic routing and convergence
+- **Network Services** - DHCP relay, NAT/PAT translation
+- **Tunneling** - GRE encapsulation for site-to-site VPNs
+- **Security** - ACL implementation for traffic filtering
+- **Troubleshooting** - Systematic network problem-solving
+
+## 🛠 Tools & Technologies
+
+- **Cisco Packet Tracer** - Network simulation
+- **Cisco IOS** - Router and switch configuration
+- **Protocols:** OSPF, GRE, DHCP, NAT/PAT, 802.1Q
+- **Git** - Version control
+- **Markdown** - Documentation
+
+## 📚 Additional Resources
+
+- [Cisco Packet Tracer Download](https://www.netacad.com/courses/packet-tracer)
+- [Cisco IOS Command Reference](https://www.cisco.com/c/en/us/support/)
+- [CCNA Study Guide](https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html)
+
+## 🤝 Contributions
+
+This is a university project, but feel free to:
+- ⭐ Star this repository if you find it helpful
+- 🐛 Report issues or suggest improvements
+- 📖 Use as learning reference (with attribution)
+
+## 📄 License & Attribution
+
+**Academic Project** - For educational purposes  
+**Student:** Mohammad (ID: 40119783)  
+**Course:** Computer Networks 2  
+**Instructor:** Dr. Fatemeh Rezaei  
+**Institution:** [Your University Name]
+
+If you use this project as reference, please provide attribution.
+
+## 📧 Contact
+
+For questions or discussions about this project:
+- Open an issue on GitHub
+- Check the documentation files
+- Review troubleshooting guides
+
+---
+
+**⭐ If this project helped you learn networking concepts, please star the repository!**
+
+*Last Updated: February 2026*

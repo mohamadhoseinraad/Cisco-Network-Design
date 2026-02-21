@@ -1,0 +1,111 @@
+! HQ-Switch Configuration
+! Student ID: 40119783
+! Layer 2 Switch with VLANs
+
+!===========================================
+! Basic Configuration
+!===========================================
+enable
+configure terminal
+hostname HQ-Switch
+no ip domain-lookup
+
+!===========================================
+! VLAN Configuration
+!===========================================
+vlan 10
+ name Users_VLAN10
+ exit
+
+vlan 20
+ name Users_VLAN20
+ exit
+
+vlan 30
+ name Server_DHCP
+ exit
+
+!===========================================
+! Interface Configuration
+!===========================================
+
+! Access Ports for VLAN 10 Users
+interface FastEthernet0/1
+ description PC1 - VLAN 10
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ exit
+
+interface FastEthernet0/2
+ description PC2 - VLAN 10
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ exit
+
+! Access Ports for VLAN 20 Users
+interface FastEthernet0/3
+ description PC3 - VLAN 20
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ exit
+
+interface FastEthernet0/4
+ description PC4 - VLAN 20
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ exit
+
+! Access Port for VLAN 30 (DHCP Server)
+interface FastEthernet0/5
+ description DHCP Server - VLAN 30
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ exit
+
+! Trunk Port to R1-HQ Router
+interface GigabitEthernet0/1
+ description Trunk to R1-HQ Router
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+ exit
+
+!===========================================
+! Management VLAN (Optional)
+!===========================================
+interface vlan 1
+ no ip address
+ shutdown
+ exit
+
+!===========================================
+! Security Configuration
+!===========================================
+! Enable password encryption
+service password-encryption
+
+! Console Line
+line con 0
+ password cisco
+ login
+ logging synchronous
+ exit
+
+! VTY Lines
+line vty 0 15
+ password cisco
+ login
+ exit
+
+! Enable Secret
+enable secret class
+
+!===========================================
+! Save Configuration
+!===========================================
+end
+copy running-config startup-config

@@ -1,0 +1,64 @@
+! Branch-Switch Configuration
+! Student ID: 40119783
+! Simple Layer 2 Switch
+
+!===========================================
+! Basic Configuration
+!===========================================
+enable
+configure terminal
+hostname Branch-Switch
+no ip domain-lookup
+
+!===========================================
+! Interface Configuration
+!===========================================
+
+! Access Ports for Branch Users
+interface FastEthernet0/1
+ description Branch-PC1
+ switchport mode access
+ spanning-tree portfast
+ exit
+
+interface FastEthernet0/2
+ description Branch-PC2
+ switchport mode access
+ spanning-tree portfast
+ exit
+
+! Web Server Port
+interface FastEthernet0/3
+ description Web Server (172.17.17.100)
+ switchport mode access
+ spanning-tree portfast
+ exit
+
+! Uplink to R3-Branch Router
+interface GigabitEthernet0/1
+ description Uplink to R3-Branch
+ exit
+
+!===========================================
+! Security Configuration
+!===========================================
+service password-encryption
+
+line con 0
+ password cisco
+ login
+ logging synchronous
+ exit
+
+line vty 0 15
+ password cisco
+ login
+ exit
+
+enable secret class
+
+!===========================================
+! Save Configuration
+!===========================================
+end
+copy running-config startup-config
